@@ -10,3 +10,4 @@ django-bootstrap3==5.1.1
 whitenoise==1.0.6
 numpy==1.9.0
 scipy==0.13.3
+scikit-image==0.11.3
