@@ -2,6 +2,6 @@
 
 * Auto measurement of cluster size
 
-* Image processing requires sk-image
+* [Demo](https://test-django-pylib.herokuapp.com/testapp/clustersizer/)
 
-* Testing of heroku scipy custom buildpack from [https://github.com/thenovices/heroku-buildpack-scipy](https://github.com/thenovices/heroku-buildpack-scipy)
+* Image processing requires sk-image ... uses [custom Heroku buildpack for scipy](https://github.com/thenovices/heroku-buildpack-scipy)
