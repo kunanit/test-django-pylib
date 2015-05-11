@@ -1,0 +1,14 @@
+
+
+<h1> Cluster Sizer </h1>
+
+
+<form action="{% url 'testapp:reviewclusters' %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+{{form}}
+<input type="submit" value="Submit" />
+</form>
+
+
+

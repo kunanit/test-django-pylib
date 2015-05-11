@@ -1,0 +1,48 @@
+<head>
+
+<style>
+img {
+	width:100px;
+	border-style:solid;
+	border-color:white;
+	/*margin:5px;*/
+	border-width:1px;
+}
+img.active {
+	border-color:black;
+}
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	$('img').click(function(){
+		$(this).toggleClass('active');
+	});
+
+	$('form').submit(function(){
+		var output = []
+		$('img.active').each(function(){
+			output.push($(this).attr('diam'));
+		});
+		$('#diamvals').val(output.toString());
+	})
+
+})
+</script>
+</head>
+
+<h1> Review clusters </h1>
+
+
+<form action="{% url 'testapp:clusterresults' %}" method="post">
+{% csrf_token %}
+
+<input type="submit" value="Get results" />
+<input id='diamvals' type="hidden" name="mmts" value=''/>
+</form>
+
+{% for cluster in clusters %}
+<img src="data:image/png;base64,{{cluster.data}}" diam="{{cluster.diameter}}"/>
+{% endfor %}
+
