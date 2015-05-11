@@ -76,6 +76,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# django bootstrap
+BOOTSTRAP3 = {}
+BOOTSTRAP3['include_jquery'] = True
+
 
 ## HEROKU SPECIFIC CONFIG
 
