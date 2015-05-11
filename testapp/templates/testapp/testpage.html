@@ -1,5 +1,9 @@
 {% extends "testapp/basesite.html" %}
 {% load staticfiles %}
+
+{% block content %}
 <h1> My title </h1>
 <!-- <img src="data:image/png;base64,{{figure}}"/> -->
 <img src="data:image/png;base64,{{figure}}" />
+
+{% endblock %}
