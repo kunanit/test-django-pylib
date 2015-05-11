@@ -1,4 +1,4 @@
-{% extends "colortask/basesite.html" %}
+{% extends "testapp/basesite.html" %}
 {% load staticfiles %}
 <form action="{% url 'testapp:uploadfile' %}" method="post" enctype="multipart/form-data">
 {% csrf_token %}
