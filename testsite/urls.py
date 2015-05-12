@@ -6,6 +6,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'testsite.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^testapp/', include('testapp.urls', namespace='testapp')),
+    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^clustersizer/', include('clustersizer.urls', namespace='clustersizer')),
 )

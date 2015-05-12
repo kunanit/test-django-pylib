@@ -1,0 +1,39 @@
+{% extends "clustersizer/basesite.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+
+{% block extrahead %}
+<!-- <link rel="stylesheet" href="{% static 'lib/css/dropzone.css' %}"/> -->
+<!-- <script src="{% static 'lib/js/dropzone.js' %}"></script> -->
+<script>
+// $(document).ready(function(){
+
+// 	$('#uploadform').dropzone({
+// 		paramName:"image",
+// 		maxFiles: 1,
+// 	});
+// });
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class='container'>
+<h1 style='text-align:center;'> Cluster Sizer </h1>
+<div class='row'>
+
+<form action="{% url 'clustersizer:review' %}" method="post" enctype="multipart/form-data" class="form" id="uploadform">
+{% csrf_token %}
+
+{% bootstrap_form form %}
+
+<input type="submit" value="Submit" />
+</form>
+</div>
+</div>
+
+{% endblock %}
+
+

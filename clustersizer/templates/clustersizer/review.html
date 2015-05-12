@@ -36,11 +36,11 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block content %}
-
+<div class='container'>
 <h1> Review clusters </h1>
 
-
-<form action="{% url 'testapp:clusterresults' %}" method="post">
+<div class='row'>
+<form action="{% url 'clustersizer:results' %}" method="post">
 {% csrf_token %}
 
 <input type="submit" value="Get results" />
@@ -51,4 +51,6 @@ $(document).ready(function(){
 <img src="data:image/png;base64,{{cluster.data}}" diam="{{cluster.diameter}}"/>
 {% endfor %}
 
+</div>
+</div>
 {% endblock %}

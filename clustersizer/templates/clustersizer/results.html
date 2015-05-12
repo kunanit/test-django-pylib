@@ -1,0 +1,42 @@
+{% extends "clustersizer/basesite.html" %}
+{% load staticfiles %}
+
+{% block extrahead %}
+<style>
+.row{
+	margin-left:100px;
+	margin-right:100px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class='container'>
+<h1> Results </h1>
+<div class="row">
+<div class="panel panel-default">
+  <div class="panel-body">
+    
+	<p> Mean: {{mean}}</p>
+	<p> SE: {{se}}</p>
+  </div>
+</div>
+</div>
+
+<div class="row">
+<table class="table">
+<thead>
+<tr>
+<th> n </th>
+<th> length </th>
+</tr>
+</thead>
+{% for mmt in mmts %}
+<tr><td>{{forloop.counter}}</td><td>{{mmt}}</td></tr>
+{% endfor %}
+</table>
+
+
+</div>
+</div>
+{% endblock %}

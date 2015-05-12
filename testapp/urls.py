@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 
-from testapp import views
+from clustersizer import views
 
 
 urlpatterns = patterns('',
