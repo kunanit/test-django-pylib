@@ -9,6 +9,7 @@ img {
 	border-color:white;
 	/*margin:5px;*/
 	border-width:1px;
+	margin-top:5px;
 }
 img.active {
 	border-color:black;
@@ -20,7 +21,17 @@ img.active {
 $(document).ready(function(){
 	$('img').click(function(){
 		$(this).toggleClass('active');
+		var counter = $('img.active').length
+		$('.counter').text(counter);
+		if (counter>0){
+			$('button').attr('disabled',false);
+		} else{
+			$('button').attr('disabled','disabled');
+	}
+
 	});
+
+	
 
 	$('form').submit(function(){
 		var output = []
@@ -38,12 +49,16 @@ $(document).ready(function(){
 {% block content %}
 <div class='container'>
 <h1> Review clusters </h1>
-
+<p style='text-align:center'> <span class='counter'>0</span> clusters selected </p>
 <div class='row'>
-<form action="{% url 'clustersizer:results' %}" method="post">
+
+<form action="{% url 'clustersizer:results' %}" method="post" class=text-center>
 {% csrf_token %}
 
-<input type="submit" value="Get results" />
+<!-- <input type="submit" value="Get results" /> -->
+
+<button type="submit" class="btn btn-default" disabled='disabled'>Get results</button>
+
 <input id='diamvals' type="hidden" name="mmts" value=''/>
 </form>
 

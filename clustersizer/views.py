@@ -16,65 +16,7 @@ from skimage.measure import regionprops
 from skimage.feature import peak_local_max
 from skimage.segmentation import clear_border
 from scipy import ndimage
-from numpy import zeros_like, pi, mean, std
-
-
-def show_image(im, **kwargs):
-    fig = plt.figure(figsize=(15,15))
-    ax = fig.add_subplot(111)
-    ax.imshow(im, **kwargs)
-    return fig, ax
-
-# Create your views here.
-def home(request):
-	# return render(request,'testapp/home.html')
-	return HttpResponse('hello world')
-
-def testpage1(request):
-	fig = Figure()
-	plt.plot([1,2,3])
-	buf = cStringIO.StringIO()
-	plt.savefig(buf,format='png')
-	data = buf.getvalue().encode("base64").strip()
-
-
-	context = {'figure':data}
-	return render(request,'clustersizer/testpage.html',context)
-
-def testpage(request):
-	img1 = 'F1-S0d3-H.JPG'
-	buf = cStringIO.StringIO()
-	# fig = Figure()
-	fig = plt.figure()
-	ax = fig.add_subplot(111)
-	ax.imshow(imread(img1))
-	ax.axis('off')
-	fig.savefig(buf,format='png')
-	data = buf.getvalue().encode("base64").strip()
-	context = {'figure':data}
-	return render(request,'clustersizer/testpage.html',context)
-
-def uploadfiletest(request):
-	if request.method == 'POST':
-		# form = UploadFileForm(request.POST, request.FILES)
-		# if form.is_valid():
-		if request.FILES:
-			inbuf = cStringIO.StringIO()
-			inbuf.write(request.FILES['image'].read())
-
-			fig = plt.figure()
-			ax = fig.add_subplot(111)
-			outbuf = cStringIO.StringIO()
-			ax.imshow(imread(inbuf))
-			fig.savefig(outbuf,format='png')
-			data = outbuf.getvalue().encode("base64").strip()
-			context = {'figure':data}
-			return render(request,'clustersizer/testpage.html',context)
-	else:
-		form = UploadFileForm()
-	return render(request, 'clustersizer/uploadfile.html',{'form':form})
-
-	
+from numpy import zeros_like, pi, mean, std, sqrt
 
 
 
@@ -85,8 +27,7 @@ def diameter(num_px):
     return ((A/pi)**(0.5))*2
 
 def clusterDetector(buf):
-	# img1 = 'F1-S0d3-H.JPG'
-	# img_filename = img1
+
 	img = 255-imread(buf, as_grey=True)
 	med_img = filters.median(img, disk(3))
 
@@ -116,25 +57,13 @@ def clusterDetector(buf):
 
 	props = regionprops(cleared_labels)
 
-
-	# offset = 0
-	# cnum = 0
-	# prop = props[cnum]
-	# box = prop.bbox
-	# imbox = img[box[0]-offset:box[2]+offset, box[1]-offset:box[3]+offset]
-	# plt.imshow(imbox, interpolation='nearest', cmap='Greys')
-	# plt.imshow(prop.image,cmap="Reds",alpha=0.3)
-	# plt.axis('off')
-
 	offset = 0
 
-	# fig = plt.figure(figsize=(15,15))
 	output = []
 	for i, prop in enumerate(props):
 
 		box = prop.bbox
 	
-		# a = fig.add_subplot(12, 12, i+1)
 		fig = Figure()
 		canvas = FigureCanvasAgg(fig)
 		ax = fig.add_subplot(111)
@@ -143,7 +72,7 @@ def clusterDetector(buf):
 		ax.axis('off')
 		buf = cStringIO.StringIO()
 		fig.savefig(buf,format='png')
-		# plt.clf()
+
 		data = buf.getvalue().encode("base64").strip()
 
 		diam = diameter(prop.image.sum())
@@ -151,8 +80,6 @@ def clusterDetector(buf):
 		output.append({'data':data,'diameter':diam})
 
 	return output
-	# context = {'clusters':output}
-	# return render(request,'testapp/testpage.html',context)
 
 
 def upload(request):
@@ -184,7 +111,7 @@ def results(request):
 		mmts_str = ['{0:.2f}'.format(m) for m in mmts]
 		context = {'mmts':mmts_str,
 					'mean':'{0:.2f}'.format(mean(mmts)),
-					'se':'{0:.2f}'.format(std(mmts)**(.5))}
+					'se':'{0:.2f}'.format(std(mmts)/sqrt(len(mmts)))}
 		return render(request,'clustersizer/results.html',context)
 	else:
 		redirect('/clustersizer/upload')
