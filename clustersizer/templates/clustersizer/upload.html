@@ -24,7 +24,7 @@ $(document).ready(function(){
 <div class='row'>
 	<div class='center-block panel panel-default' style='max-width:500px;'>
 	<!-- <div class='center-block' style='max-width:500px;'> -->
-	<form action="{% url 'clustersizer:review' %}" method="post" enctype="multipart/form-data" class="form" id="uploadform" style='padding:10px'>
+	<form action="{% url 'clustersizer:upload' %}" method="post" enctype="multipart/form-data" class="form" id="uploadform" style='padding:10px'>
 	{% csrf_token %}
 
 	{% bootstrap_form form %}

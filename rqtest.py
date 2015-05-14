@@ -2,7 +2,7 @@
 
 from redis import Redis
 from rq import Queue
-from utils import testfun
+
 from time import sleep
 
 # # django_rq.enqueue(myfun, 'pizza')
