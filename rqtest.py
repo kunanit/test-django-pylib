@@ -1,8 +1,18 @@
-import django_rq
+# import django_rq
+
+from redis import Redis
+from rq import Queue
+from utils import testfun
+from time import sleep
+
+# # django_rq.enqueue(myfun, 'pizza')
 
 
-def myfun(input):
-	return input
 
+# print testfun('Andrew')
 
-django_rq.enqueue(myfun, 'pizza')
+q = Queue(connection=Redis())
+job= q.enqueue(testfun,'Andrew')
+print job.result
+sleep(5)
+print job.result

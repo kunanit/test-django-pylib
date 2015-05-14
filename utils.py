@@ -1,4 +1,5 @@
+from time import sleep
 
-
-def testfunction():
-	return 'hello world'
+def testfun(name):
+	sleep(3)
+	return 'hello '+name
