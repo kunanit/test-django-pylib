@@ -8,4 +8,7 @@ urlpatterns = patterns('',
 
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^clustersizer/', include('clustersizer.urls', namespace='clustersizer')),
+    urlpatterns += patterns('',
+    	(r'^django-rq/', include('django_rq.urls')),
+	)
 )

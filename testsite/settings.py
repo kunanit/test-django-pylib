@@ -29,25 +29,26 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'bootstrap3',
-    'clustersizer',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'bootstrap3',
+	'clustersizer',
+	'django_rq',
 
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'testsite.urls'
@@ -103,10 +104,37 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,'templates'),)
 
+
+# redis for worker queue
+RQ_QUEUES = {
+	'default': {
+		'HOST': 'localhost',
+		'PORT': 6379,
+		'DB': 0,
+		'PASSWORD': 'some-password',
+		'DEFAULT_TIMEOUT': 360,
+	},
+	'high': {
+		'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'), # If you're on Heroku
+		'DB': 0,
+		'DEFAULT_TIMEOUT': 500,
+	},
+	'low': {
+		'HOST': 'localhost',
+		'PORT': 6379,
+		'DB': 0,
+	}
+}
+
+if DEBUG or TESTING:
+    for queueConfig in RQ_QUEUES.itervalues():
+        queueConfig['ASYNC'] = False
+
+
 try:
-    from local_settings import *
+	from local_settings import *
 except ImportError:
-    pass
+	pass
 
 # private api keys, etc loaded from local_settings
 
