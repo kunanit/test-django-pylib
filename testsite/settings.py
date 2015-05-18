@@ -107,28 +107,24 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR,'templates'),)
 
 # redis for worker queue
 RQ_QUEUES = {
+	# 'default': {
+	# 	'HOST': 'localhost',
+	# 	'PORT': 6379,
+	# 	'DB': 0,
+	# 	'PASSWORD': 'some-password',
+	# 	'DEFAULT_TIMEOUT': 360,
+	# },
 	'default': {
-		'HOST': 'localhost',
-		'PORT': 6379,
-		'DB': 0,
-		'PASSWORD': 'some-password',
-		'DEFAULT_TIMEOUT': 360,
-	},
-	'high': {
 		'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'), # If you're on Heroku
 		'DB': 0,
 		'DEFAULT_TIMEOUT': 500,
 	},
-	'low': {
-		'HOST': 'localhost',
-		'PORT': 6379,
-		'DB': 0,
-	}
-}
-
-if DEBUG or TESTING:
-    for queueConfig in RQ_QUEUES.itervalues():
-        queueConfig['ASYNC'] = False
+# 	'low': {
+# 		'HOST': 'localhost',
+# 		'PORT': 6379,
+# 		'DB': 0,
+# 	}
+# }
 
 
 try:
