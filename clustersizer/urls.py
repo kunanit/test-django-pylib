@@ -7,4 +7,5 @@ urlpatterns = patterns('',
 	url(r'^upload/$',views.upload, name='upload'),
 	url(r'^review/$',views.review, name='review'),
 	url(r'^results/$',views.results, name='results'),
+	url(r'^checkstatus/$',views.checkstatus, name='checkstatus'),
 )

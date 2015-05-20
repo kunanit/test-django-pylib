@@ -19,7 +19,8 @@ def upload(request):
 		return HttpResponse(job.id)
 		
 	else:
-		return render(request, 'clustersizer/upload.html',{'form':form})
+		form = UploadFileForm(request.POST, request.FILES)
+		return render(request, 'clustersizer/upload.html')
 
 
 def checkstatus(request):
