@@ -4,22 +4,49 @@
 
 
 {% block extrahead %}
-
+<!-- <link rel="stylesheet" href="{% static 'lib/css/dropzone.css'%}"> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- <script src="{% static 'lib/js/dropzone.js' %}"></script> -->
 <script>
+
 $(document).ready(function(){
-	// $(uploadform).submit(function(){
-	// 	$('#status-text').toggle();
-	// 	$('.progress-bar').animate({width: '90%'},10000);
-	// });
-	Dropzone.options.myform = {
-	paramName:"file",
-	maxFiles:1,
-	init: function() {
-    this.on("success", function(file,response) { alert(response); });
-  }
-}
+	$("#uploadform").submit(function(event){
+		event.preventDefault();
+		
+		$.post("/clustersizer/upload/",$("#uploadform").serialize()).done(function(jobid){
+				alert('submit');
+				$('body').append('<p>'+jobid+'</p>');
+				checkstatus(jobid);
+				
+		});
+	});
+
+	function checkstatus(jobid){
+		console.log("calling checkstatus");
+		$.get("/rqapp/checkstatus/",{jobid:jobid},function(response){
+			console.log(response);
+			if (response === 'processing'){
+				// wait 5 sec before calling again
+				setTimeout(function(){checkstatus(jobid)},5000);
+			}
+			else {
+			// when ready, go to success page
+				window.location.href = '/clustersizer/success/?jobid='+jobid;
+			}
+		});
+	}
+
+	// Dropzone.options.uploadform = {
+	// paramName:"file",
+	// maxFiles:1,
+	// // autoProcessQueue:false,
+	// init: function() {
+ //    	this.on("success", function(file,response) { alert(response); });
+ //  		}
+	// }
 });
-	
+
+
 </script>
 
 {% endblock %}
@@ -31,9 +58,11 @@ $(document).ready(function(){
 <div class='row'>
 	<div class='center-block panel panel-default' style='max-width:500px;'>
 	<!-- <div class='center-block' style='max-width:500px;'> -->
-	<form action="{% url 'clustersizer:upload' %}" method="POST" enctype="multipart/form-data" class="form dropzone" id="uploadform" style='padding:10px'>
+	<form enctype="multipart/form-data" class="form" id="uploadform" style='padding:10px'>
 	{% csrf_token %}
-
+	<input type="text" name="name" id="name">
+	<input type="file" name="image">
+	<input type="submit" value="Submit">
 	</form>
 
 	</div>

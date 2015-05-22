@@ -11,15 +11,16 @@ import django_rq
 
 def upload(request):
 	if request.method == 'POST':
-		form = UploadFileForm(request.POST, request.FILES)
+		# form = UploadFileForm(request.POST, request.FILES)
 		buf = cStringIO.StringIO()
 		buf.write(request.FILES['image'].read())
+		imgstr = buf.getvalue().encode("base64").strip()
 		# send to queue
-		job = django_rq.enqueue(clusterDetector,buf)
+		job = django_rq.enqueue(clusterDetector,imgstr)
 		return HttpResponse(job.id)
 		
 	else:
-		form = UploadFileForm(request.POST, request.FILES)
+		# form = UploadFileForm(request.POST, request.FILES)
 		return render(request, 'clustersizer/upload.html')
 
 
