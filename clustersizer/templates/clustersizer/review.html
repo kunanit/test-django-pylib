@@ -12,26 +12,37 @@ img {
 	margin-top:5px;
 }
 img.active {
-	border-color:black;
+	border-color:#888;
 }
 </style>
 
 
 <script>
 $(document).ready(function(){
-	$('img').click(function(){
-		$(this).toggleClass('active');
+	function updateCount(){
 		var counter = $('img.active').length
 		$('.counter').text(counter);
 		if (counter>0){
 			$('button').attr('disabled',false);
 		} else{
 			$('button').attr('disabled','disabled');
+		}
 	}
 
+	$('img').click(function(){
+		$(this).toggleClass('active');
+		updateCount();
 	});
 
-	
+	$('#selectall').click(function(){
+		$('img').addClass('active');
+		updateCount();
+	})
+
+	$('#deselectall').click(function(){
+		$('img').removeClass('active');
+		updateCount();
+	})
 
 	$('form').submit(function(){
 		var output = []
@@ -56,8 +67,10 @@ $(document).ready(function(){
 {% csrf_token %}
 
 <!-- <input type="submit" value="Get results" /> -->
-
+<p><a id='selectall' href='#'>Select all</a> / <a id='deselectall' href='#'>deselect all</a><p>
 <button type="submit" class="btn btn-default" disabled='disabled'>Get results</button>
+
+
 
 <input id='diamvals' type="hidden" name="mmts" value=''/>
 </form>

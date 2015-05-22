@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
+from numpy import mean, std, sqrt
 import cStringIO
 from clustersizer.forms import UploadFileForm
 
@@ -15,10 +15,10 @@ def upload(request):
 		buf = cStringIO.StringIO()
 		buf.write(request.FILES['image'].read())
 		imgstr = buf.getvalue()#.encode("base64").strip()
-		# imgstr = request.FILES['image'].read()
 		# send to queue
-		# imgstr = 'hi'
-		job = django_rq.enqueue(clusterDetector,imgstr)
+		job = django_rq.enqueue(clusterDetector,imgstr,
+			filetype=request.POST['filetype'],
+			clustercolor=request.POST['clustercolor'])
 		return HttpResponse(job.id)
 		
 	else:

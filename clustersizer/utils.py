@@ -20,17 +20,23 @@ from numpy import zeros_like, pi, mean, std, sqrt
 
 
 
-def clusterDetector(imgstr):
+def clusterDetector(imgstr, filetype, clustercolor):
 
 	def diameter(num_px):
-		R = 24.95816
+		if filetype=='tiff':
+			R = 0.16415411
+		elif filetype=='jpeg':
+			R = 24.95816
 		Apx = (50/R)**2 # area of single pixel, about 4 um^2 / sq px
 		A = Apx*num_px
 		return ((A/pi)**(0.5))*2
 
 	buf = cStringIO.StringIO(imgstr) 
 	
-	img = 255-imread(buf, as_grey=True)
+	if clustercolor=='dark':
+		img = 255-imread(buf, as_grey=True)
+	elif clustercolor=='light':
+		img = imread(buf, as_grey=True)
 
 	print "Image read by worker, starting image processing"
 	med_img = filters.median(img, disk(3))
