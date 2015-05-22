@@ -20,7 +20,7 @@ from numpy import zeros_like, pi, mean, std, sqrt
 
 
 
-def clusterDetector(imgstring):
+def clusterDetector(imgstr):
 
 	def diameter(num_px):
 		R = 24.95816
@@ -28,8 +28,11 @@ def clusterDetector(imgstring):
 		A = Apx*num_px
 		return ((A/pi)**(0.5))*2
 
-	buf = cStringIO.StringIO(imgstring) 
+	buf = cStringIO.StringIO(imgstr) 
+	
 	img = 255-imread(buf, as_grey=True)
+
+	print "Image read by worker, starting image processing"
 	med_img = filters.median(img, disk(3))
 
 
@@ -79,5 +82,5 @@ def clusterDetector(imgstring):
 		diam = diameter(prop.image.sum())
 
 		output.append({'data':data,'diameter':diam})
-
+	print "job finished"
 	return output

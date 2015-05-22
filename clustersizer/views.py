@@ -14,8 +14,10 @@ def upload(request):
 		# form = UploadFileForm(request.POST, request.FILES)
 		buf = cStringIO.StringIO()
 		buf.write(request.FILES['image'].read())
-		imgstr = buf.getvalue().encode("base64").strip()
+		imgstr = buf.getvalue()#.encode("base64").strip()
+		# imgstr = request.FILES['image'].read()
 		# send to queue
+		# imgstr = 'hi'
 		job = django_rq.enqueue(clusterDetector,imgstr)
 		return HttpResponse(job.id)
 		
@@ -37,8 +39,11 @@ def checkstatus(request):
 def review(request):
 	jobid = request.GET['jobid']
 	q = django_rq.get_queue()
+	print "retrieved queue"
 	result = q.fetch_job(jobid).result
+	print "retrived result"
 	context = {'clusters':result}
+	print "starting render"
 	return render(request,'clustersizer/review.html',context)
 
 
