@@ -1,0 +1,137 @@
+{% extends "clustersizer/basesite.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'lib/css/dropzone.css'%}">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="{% static 'lib/js/dropzone.js' %}"></script>
+<script>
+
+$(document).ready(function(){
+
+
+	function checkstatus(jobid){
+		console.log("calling checkstatus");
+		$.get("/clustersizer/checkstatus/",{jobid:jobid},function(response){
+			console.log(response);
+			if (response === 'processing'){
+				// wait 5 sec before calling again
+				setTimeout(function(){checkstatus(jobid)},5000);
+			}
+			else {
+			// when ready, go to success page
+				window.location.href = '/clustersizer/review/?jobid='+jobid;
+			}
+		});
+	}
+
+	Dropzone.options.uploadform = {
+		paramName:"image",
+		maxFiles:1,
+		autoProcessQueue:false,
+		init: function() {
+			var myDropzone = this;
+			
+			$("#submit").click(function(){
+				var myTitle = $("input#name").val()
+				
+				// event.preventDefault();
+
+				myDropzone.processQueue();
+				$(".progress-bar").animate({
+					width:"90%"
+				},15000);
+			});
+
+
+			this.on("sending", function(file,xhr,formData){
+				var myFiletype = $("input[name='filetype']:checked").val()
+				var myClusterColor = $("input[name='clustercolor']:checked").val()
+				formData.append("csrfmiddlewaretoken",$("input[name='csrfmiddlewaretoken']").val());
+				formData.append("title",$("input#name").val());
+				formData.append("filetype",myFiletype);
+				formData.append("clustercolor",myClusterColor);
+			});
+	    	this.on("success", function(file,jobid){
+	    		// alert(response);
+	    		// $('body').append('<p>'+'Processing image...'+'</p>');
+	    		$('#submit').toggle();
+	    		$('#loading').toggle();
+
+				checkstatus(jobid);
+    		});
+
+  		}
+	}
+
+});
+
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class='container'>
+<h1 style='text-align:center;'> Cluster Sizer </h1>
+<div class='row'>
+	<!-- <div class='center-block panel panel-default' style='max-width:500px;'> -->
+	<div class='center-block text-center' style='max-width:500px;'>
+	
+
+	<form action='/clustersizer/upload/' method='POST' enctype="multipart/form-data" class="dropzone" id="uploadform" style='padding:10px'>
+		<div class="dz-message" data-dz-message><span>Drag image here or click to open file browser</span></div>
+		{% csrf_token %}
+	</form>
+
+	<form class="form" style='padding:10px'> 
+		<label class="control-label">file type</label>
+		<br>
+		<input hidden type="text" name="name" id="name">
+		<label class="radio-inline">
+			<input name='filetype' type="radio" value="tiff" checked="checked"> .tiff
+		</label>
+		<label class="radio-inline">
+			<input name='filetype' type="radio" value="jpeg"> .jpeg
+		</label>
+	</form>
+
+	<form class="form" style='padding:10px'>
+		<label class="control-label">contrast type</label>
+		<br>
+		<div class="radio">
+			<label>
+				<input name='clustercolor' type="radio" value="dark" checked="checked"> dark clusters, light background
+			</label>
+		</div>
+		<div class="radio">
+			<label>
+				<input name='clustercolor' type="radio" value="light"> light clusters, dark background
+			</label>
+		</div>
+		</label>
+	</form>
+
+	<button id="submit" type="submit" class="btn btn-default" value="Submit">submit</button>
+
+	</div>
+
+</div>
+<div class='row'>
+<div class='center-block text-center' style='max-width:600px;display:none' id='loading'>
+	Processing image...
+	<p><img src="{% static 'loading_spinner.gif' %}" height=100px width=100px></img></p>
+</div>
+<!-- <p id='status-text' style='text-align:center;display:none'> Processing image... </p> -->
+</div>
+</div>
+
+
+</div>
+
+{% endblock %}
+
+
