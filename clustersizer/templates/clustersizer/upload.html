@@ -60,7 +60,7 @@ $(document).ready(function(){
 	    		$('#submit').toggle();
 	    		$('#loading').toggle();
 
-				// checkstatus(jobid);
+				checkstatus(jobid);
     		});
 
   		}
@@ -82,7 +82,7 @@ $(document).ready(function(){
 	<div class='center-block text-center' style='max-width:500px;'>
 	
 
-	<form action='/clustersizer/review/' method='POST' enctype="multipart/form-data" class="dropzone" id="uploadform" style='padding:10px'>
+	<form action='/clustersizer/upload/' method='POST' enctype="multipart/form-data" class="dropzone" id="uploadform" style='padding:10px'>
 		<div class="dz-message" data-dz-message><span>Drag image here or click to open file browser</span></div>
 		{% csrf_token %}
 	</form>

@@ -36,25 +36,25 @@ def checkstatus(request):
 	else:
 		return HttpResponse('processing')
 
-# def review(request):
-# 	jobid = request.GET['jobid']
-# 	q = django_rq.get_queue()
-# 	print "retrieved queue"
-# 	result = q.fetch_job(jobid).result
-# 	print "retrived result"
-# 	context = {'clusters':result}
-# 	print "starting render"
-# 	return render(request,'clustersizer/review.html',context)
-
 def review(request):
-	buf = cStringIO.StringIO()
-	buf.write(request.FILES['image'].read())
-	imgstr = buf.getvalue()
-	result = clusterDetector(imgstr,
-					filetype=request.POST['filetype'],
-					clustercolor=request.POST['clustercolor'])
+	jobid = request.GET['jobid']
+	q = django_rq.get_queue()
+	print "retrieved queue"
+	result = q.fetch_job(jobid).result
+	print "retrived result"
 	context = {'clusters':result}
+	print "starting render"
 	return render(request,'clustersizer/review.html',context)
+
+# def review(request):
+# 	buf = cStringIO.StringIO()
+# 	buf.write(request.FILES['image'].read())
+# 	imgstr = buf.getvalue()
+# 	result = clusterDetector(imgstr,
+# 					filetype=request.POST['filetype'],
+# 					clustercolor=request.POST['clustercolor'])
+# 	context = {'clusters':result}
+# 	return render(request,'clustersizer/review.html',context)
 
 
 def results(request):
